@@ -1,0 +1,30 @@
+3. Image Classification mnist
+same as above till test_generator
+
+model = models.Sequential() 
+# Creates a linear stack of layers for the model.
+model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1))) 
+# Adds a convolutional layer with 32 filters, each 3x3 in size, using ReLU activation. It expects input images of shape 28x28x1.
+model.add(layers.MaxPooling2D((2, 2))) #Max pooling reduces the size of an image by keeping only the maximum value from each small region.
+# Adds a max pooling layer with a 2x2 pool size, reducing the spatial dimensions.
+model.add(layers.Flatten()) 
+# Flattens the output from the previous layer into a 1D array.
+model.add(layers.Dense(64, activation='relu')) 
+# Adds a fully connected layer with 64 units and ReLU activation.
+model.add(layers.Dense(10, activation='softmax')) 
+# Adds an output layer with 10 units (for 10 classes) and softmax activation, providing probabilities for each class.
+
+model.compile(optimizer='adam',#Adam optimizer adjusts the learning rate for each parameter individually to speed up training
+              loss='categorical_crossentropy',#Categorical cross-entropy measures the difference between predicted probabilities and true labels 
+              metrics=['accuracy']) 
+
+model.fit(x_train, y_train, epochs=5, batch_size=64, validation_data=(x_test, y_test))
+test_loss, test_accuracy = model.evaluate(x_test, y_test)
+print("Loss: ", test_loss)
+print("Accuracy: ", test_accuracy)
+
+n = 30 
+plt.imshow(x_test[n])
+predicted_value = model.predict(x_test)
+print("Actual Number: ",np.argmax(y_test[n]))
+print("Predicted Number: ", np.argmax(predicted_value[n]))
